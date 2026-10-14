@@ -852,6 +852,7 @@ QMenuBar *StackedMenuBar::createInknPaintMenuBar() {
 
   //---Draw Menu
   QMenu *drawMenu = addMenu(tr("Draw"), inknPaintMenuBar);
+  addMenuItem(drawMenu, MI_LightTable);
   addMenuItem(drawMenu, MI_ShiftTrace);
   addMenuItem(drawMenu, MI_EditShift);
   addMenuItem(drawMenu, MI_NoShift);
@@ -1535,6 +1536,7 @@ QMenuBar *StackedMenuBar::createFullMenuBar() {
   addMenuItem(viewMenu, MI_GCheck);
   addMenuItem(viewMenu, MI_ACheck);
   viewMenu->addSeparator();
+  addMenuItem(viewMenu, MI_LightTable);
   addMenuItem(viewMenu, MI_ShiftTrace);
   addMenuItem(viewMenu, MI_ShowShiftOrigin);
   addMenuItem(viewMenu, MI_EditShift);

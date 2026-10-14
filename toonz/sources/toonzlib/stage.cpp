@@ -221,6 +221,8 @@ public:
   int m_isGuidedDrawingEnabled;
   int m_guidedFrontStroke = -1;
   int m_guidedBackStroke  = -1;
+  // Light Table: opacity (0-255) of the non-current columns, -1 = off
+  int m_lightTableOpacity = -1;
   std::vector<TXshColumn *> m_ancestors;
 
   const ImagePainter::VisualSettings *m_vs;
@@ -459,6 +461,11 @@ void StageBuilder::addCell(PlayerSet &players, ToonzScene *scene, TXsheet *xsh,
     player.m_ancestorColumnIndex = m_ancestorColumnIndex;
     player.m_masks               = m_masks;
     player.m_opacity             = column->getOpacity();
+    // Light Table: fade every column except the current one, so the drawing
+    // being worked on stands out against its references.
+    if (m_lightTableOpacity >= 0 && m_currentColumnIndex >= 0 && !isCurrent)
+      player.m_opacity =
+          (UCHAR)((int)player.m_opacity * m_lightTableOpacity / 255);
     player.m_filterColor =
         scene->getProperties()->getColorFilterColor(column->getColorFilterId());
 
@@ -978,6 +985,7 @@ void Stage::visit(Visitor &visitor, const VisitArgs &args) {
   sb.m_isGuidedDrawingEnabled = args.m_isGuidedDrawingEnabled;
   sb.m_guidedFrontStroke      = args.m_guidedFrontStroke;
   sb.m_guidedBackStroke       = args.m_guidedBackStroke;
+  sb.m_lightTableOpacity      = args.m_lightTableOpacity;
 #if defined(x64)
   if (args.m_liveViewImage) {
     sb.m_liveViewImage  = args.m_liveViewImage;

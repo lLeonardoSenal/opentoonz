@@ -679,6 +679,7 @@ void Preferences::definePreferenceItems() {
          false);
   define(useOnionColorsForShiftAndTraceGhosts,
          "useOnionColorsForShiftAndTraceGhosts", QMetaType::Bool, true);
+  define(lightTableOpacity, "lightTableOpacity", QMetaType::Int, 30, 0, 100);
   define(animatedGuidedDrawing, "animatedGuidedDrawing", QMetaType::Int,
          0);  // Arrow Markers
 

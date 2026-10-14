@@ -194,6 +194,7 @@
 #define MI_GCheck "MI_GCheck"
 #define MI_ACheck "MI_ACheck"
 #define MI_ShiftTrace "MI_ShiftTrace"
+#define MI_LightTable "MI_LightTable"
 #define MI_EditShift "MI_EditShift"
 #define MI_NoShift "MI_NoShift"
 #define MI_ResetShift "MI_ResetShift"

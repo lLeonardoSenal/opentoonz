@@ -138,6 +138,9 @@ struct DVAPI VisitArgs {
   int m_isGuidedDrawingEnabled;
   int m_guidedFrontStroke;
   int m_guidedBackStroke;
+  //! Light Table: opacity (0-255) applied to the non-current columns,
+  //! or -1 when the Light Table is off.
+  int m_lightTableOpacity = -1;
 #if defined(x64)
   TRasterImageP m_liveViewImage = 0;
   TRasterImageP m_lineupImage   = 0;

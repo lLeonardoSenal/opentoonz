@@ -88,6 +88,7 @@ TEnv::IntVar ACheckToggleAction("ACheckToggleAction", 0);
 TEnv::IntVar LinkToggleAction("LinkToggleAction", 0);
 TEnv::IntVar DockingCheckToggleAction("DockingCheckToggleAction", 0);
 TEnv::IntVar ShiftTraceToggleAction("ShiftTraceToggleAction", 0);
+TEnv::IntVar LightTableToggleAction("LightTableToggleAction", 0);
 TEnv::IntVar EditShiftToggleAction("EditShiftToggleAction", 0);
 TEnv::IntVar ShowShiftOriginToggleAction("ShowShiftOriginToggleAction", 0);
 TEnv::IntVar NoShiftToggleAction("NoShiftToggleAction", 0);
@@ -1747,6 +1748,8 @@ void MainWindow::onMenuCheckboxChanged() {
     LinkToggleAction = isChecked;
   else if (cm->getAction(MI_ShiftTrace) == action)
     ShiftTraceToggleAction = isChecked;
+  else if (cm->getAction(MI_LightTable) == action)
+    LightTableToggleAction = isChecked;
   else if (cm->getAction(MI_EditShift) == action)
     EditShiftToggleAction = isChecked;
   else if (cm->getAction(MI_NoShift) == action)
@@ -2734,6 +2737,8 @@ void MainWindow::defineActions() {
                ACheckToggleAction ? 1 : 0, MenuViewCommandType, "gap_check");
   createToggle(MI_ShiftTrace, QT_TR_NOOP("Shift and Trace"), "", false,
                MenuViewCommandType, "shift_and_trace");
+  createToggle(MI_LightTable, QT_TR_NOOP("Light Table"), "",
+               LightTableToggleAction ? 1 : 0, MenuViewCommandType, "");
   createToggle(MI_EditShift, QT_TR_NOOP("Edit Shift"), "", false,
                MenuViewCommandType, "shift_and_trace_edit");
   createToggle(MI_NoShift, QT_TR_NOOP("No Shift"), "", false,

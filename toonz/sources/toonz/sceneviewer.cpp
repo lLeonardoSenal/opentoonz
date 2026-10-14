@@ -278,6 +278,7 @@ void ToggleCommandHandler::execute() {
 
 ToggleCommandHandler viewTableToggle(MI_ViewTable, false);
 ToggleCommandHandler editInPlaceToggle(MI_ToggleEditInPlace, false);
+ToggleCommandHandler lightTableToggle(MI_LightTable, false);
 ToggleCommandHandler fieldGuideToggle(MI_FieldGuide, false);
 ToggleCommandHandler safeAreaToggle(MI_SafeArea, false);
 ToggleCommandHandler rasterizePliToggle(MI_RasterizePli, false);
@@ -2187,6 +2188,9 @@ void SceneViewer::drawScene() {
     args.m_isGuidedDrawingEnabled = useGuidedDrawing;
     args.m_guidedFrontStroke      = guidedFrontStroke;
     args.m_guidedBackStroke       = guidedBackStroke;
+    if (lightTableToggle.getStatus())
+      args.m_lightTableOpacity =
+          Preferences::instance()->getLightTableOpacity() * 255 / 100;
 
     // args.m_currentFrameId = app->getCurrentFrame()->getFid();
     Stage::visit(painter, args);
@@ -2250,6 +2254,10 @@ void SceneViewer::drawScene() {
       args.m_isGuidedDrawingEnabled = useGuidedDrawing;
       args.m_guidedFrontStroke      = guidedFrontStroke;
       args.m_guidedBackStroke       = guidedBackStroke;
+      // Light Table: fade the other columns (not during playback)
+      if (lightTableToggle.getStatus() && !args.m_isPlaying)
+        args.m_lightTableOpacity =
+            Preferences::instance()->getLightTableOpacity() * 255 / 100;
 
 #if defined(x64)
       if (m_stopMotion->m_alwaysUseLiveViewImages &&

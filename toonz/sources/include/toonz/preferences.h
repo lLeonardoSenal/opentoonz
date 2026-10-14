@@ -519,6 +519,8 @@ public:
     backColor  = getColorValue(backOnionColor),
     inksOnly   = getBoolValue(onionInksOnly);
   }
+  //! Opacity (0-100%) of the non-current columns when Light Table is on.
+  int getLightTableOpacity() const { return getIntValue(lightTableOpacity); }
   bool getOnionSkinDuringPlayback() {
     return getBoolValue(onionSkinDuringPlayback);
   }
