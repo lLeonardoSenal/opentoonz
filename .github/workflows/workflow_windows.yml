@@ -5,9 +5,11 @@ concurrency:
   cancel-in-progress: ${{ github.head_ref != '' }}
 
 on:
+  workflow_dispatch:  # Allow manual builds from the Actions tab
   push:
     branches:
       - master  # Specify branches where the workflow should run
+      - 'feat/**'  # Feature branches of this fork
     paths:
       - '**/*'                                    # Include all files in the repository
       - '!appveyor.yml'                           # Ignore changes in AppVeyor
