@@ -68,7 +68,7 @@
     </menu>
   </menu>
   <menu title="Draw">
-    <command>MI_ShiftTrace</command>
+    <command>MI_LightTable</command><command>MI_ShiftTrace</command>
     <command>MI_EditShift</command>
     <command>MI_NoShift</command>
     <command>MI_ResetShift</command>
