@@ -169,6 +169,11 @@ class SceneViewer final : public TToolViewer, public Previewer::Listener {
   QOpenGLFramebufferObject *m_fbo = NULL;
   LutCalibrator *m_lutCalibrator  = NULL;
 
+  // 3D Reference: the model is rendered offscreen (multisampled, then
+  // resolved) and drawn as a texture in the camera box
+  QOpenGLFramebufferObject *m_ref3dFbo        = NULL;
+  QOpenGLFramebufferObject *m_ref3dResolveFbo = NULL;
+
   enum Device3D {
     NONE,
     SIDE_LEFT_3D,
@@ -333,6 +338,7 @@ protected:
   void drawDisableScissor();
   void drawBackground();
   void drawCameraStand();
+  void drawRef3D();
   void drawPreview();
   void drawOverlay();
   void drawViewerIndicators();

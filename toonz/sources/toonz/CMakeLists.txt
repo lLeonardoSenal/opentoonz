@@ -50,6 +50,8 @@ set(MOC_HEADERS
     fxparameditorpopup.h
     histogrampopup.h
     historypane.h
+    ref3dpanel.h
+    ref3dscene.h
     imageviewer.h
     layerfooterpanel.h
     layerheaderpanel.h
@@ -381,6 +383,8 @@ set(SOURCES
     mergecmapped.cpp
     comboviewerpane.cpp
     historypane.cpp
+    ref3dpanel.cpp
+    ref3dscene.cpp
     cleanupsettingspane.cpp
     audiorecordingpopup.cpp
     locatorpopup.cpp

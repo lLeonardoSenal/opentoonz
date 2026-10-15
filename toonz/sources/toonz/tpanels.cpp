@@ -26,6 +26,7 @@
 #include "previewfxmanager.h"
 #include "comboviewerpane.h"
 #include "historypane.h"
+#include "ref3dpanel.h"
 #include "cleanupsettingspane.h"
 
 #include "vectorguideddrawingpane.h"
@@ -1517,6 +1518,22 @@ public:
 
 OpenFloatingPanel openHistoryPanelCommand(MI_OpenHistoryPanel, "HistoryPanel",
                                           QObject::tr("History"));
+
+//=============================================================================
+// 3D Reference
+//-----------------------------------------------------------------------------
+
+class Ref3DPanelFactory final : public TPanelFactory {
+public:
+  Ref3DPanelFactory() : TPanelFactory("Ref3D") {}
+  void initialize(TPanel *panel) override {
+    panel->setWidget(new Ref3DPanel(panel));
+    panel->setWindowTitle(QObject::tr("3D Reference"));
+  }
+} ref3DPanelFactory;
+
+OpenFloatingPanel openRef3DPanelCommand(MI_OpenRef3DPanel, "Ref3D",
+                                        QObject::tr("3D Reference"));
 //=============================================================================
 
 #if defined(x64)

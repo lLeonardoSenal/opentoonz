@@ -336,6 +336,7 @@
 
 #define MI_OpenComboViewer "MI_OpenComboViewer"
 #define MI_OpenHistoryPanel "MI_OpenHistoryPanel"
+#define MI_OpenRef3DPanel "MI_OpenRef3DPanel"
 #define MI_OpenBrushPresetPanel "MI_OpenBrushPresetPanel"
 #define MI_AddBrushPreset "MI_AddBrushPreset"
 #define MI_RemoveBrushPreset "MI_RemoveBrushPreset"

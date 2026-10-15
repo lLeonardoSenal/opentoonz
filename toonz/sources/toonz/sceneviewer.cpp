@@ -15,6 +15,7 @@
 #endif
 #include "tenv.h"
 #include "cellselection.h"
+#include "ref3dscene.h"
 
 // TnzTools includes
 #include "tools/cursors.h"
@@ -864,6 +865,9 @@ SceneViewer::SceneViewer(ImageUtils::FullScreenWidget *parent)
     m_lutCalibrator = new LutCalibrator();
   if (Preferences::instance()->is30bitDisplayEnabled())
     setTextureFormat(TGL_TexFmt10);
+
+  connect(Ref3DScene::instance(), &Ref3DScene::changed, this,
+          [this]() { GLInvalidateAll(); });
 }
 
 //-----------------------------------------------------------------------------
@@ -885,6 +889,12 @@ SceneViewer::~SceneViewer() {
   emit aboutToBeDestroyed();
 
   if (m_fbo) delete m_fbo;
+  if (m_ref3dFbo || m_ref3dResolveFbo) {
+    makeCurrent();
+    delete m_ref3dFbo;
+    delete m_ref3dResolveFbo;
+    doneCurrent();
+  }
 
   // release all the registered context (once when exit the software)
   for (const auto &ctx : l_contexts) {
@@ -1557,6 +1567,11 @@ void SceneViewer::drawCameraStand() {
     glPopMatrix();
   }
 
+  // draw the 3D Reference behind the drawings
+  if (!m_draw3DMode && m_drawEditingLevel == false && !m_drawCameraTest &&
+      m_visualSettings.m_colorMask == 0)
+    drawRef3D();
+
   // Show white background when level editing mode.
   TTool *tool = TApp::instance()->getCurrentTool()->getTool();
   if (m_drawEditingLevel && tool && tool->isEnabled()) {
@@ -1627,6 +1642,96 @@ void SceneViewer::drawCameraStand() {
   assert(glGetError() == GL_NO_ERROR);
   drawScene();
   assert((glGetError()) == GL_NO_ERROR);
+}
+
+//-----------------------------------------------------------------------------
+
+void SceneViewer::drawRef3D() {
+  Ref3DScene *ref = Ref3DScene::instance();
+  if (!ref->isVisible() || !ref->hasModel() || ref->opacity() <= 0) return;
+
+  TApp *app       = TApp::instance();
+  TCamera *camera = app->getCurrentScene()->getScene()->getCurrentCamera();
+  if (!camera) return;
+  TDimensionD camSize = camera->getSize();
+  if (camSize.lx <= 0 || camSize.ly <= 0) return;
+
+  TRectD frameRect(-0.5 * camSize.lx * Stage::inch,
+                   -0.5 * camSize.ly * Stage::inch,
+                   0.5 * camSize.lx * Stage::inch,
+                   0.5 * camSize.ly * Stage::inch);
+
+  // render at the size the camera box takes on screen
+  TPointD p00 = m_drawCameraAff * frameRect.getP00();
+  TPointD p10 = m_drawCameraAff * frameRect.getP10();
+  TPointD p01 = m_drawCameraAff * frameRect.getP01();
+  double w = tdistance(p00, p10), h = tdistance(p00, p01);
+  const double maxSize = 4096.0;
+  double scale = std::min(1.0, maxSize / std::max({w, h, 1.0}));
+  QSize size(std::max(16, int(w * scale)), std::max(16, int(h * scale)));
+
+  bool multisample = QOpenGLFramebufferObject::hasOpenGLFramebufferBlit();
+  if (!m_ref3dResolveFbo || m_ref3dResolveFbo->size() != size) {
+    delete m_ref3dFbo;
+    delete m_ref3dResolveFbo;
+    m_ref3dFbo = nullptr;
+    QOpenGLFramebufferObjectFormat resolveFormat;
+    if (multisample) {
+      QOpenGLFramebufferObjectFormat msFormat;
+      msFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+      msFormat.setSamples(4);
+      m_ref3dFbo = new QOpenGLFramebufferObject(size, msFormat);
+    } else
+      resolveFormat.setAttachment(
+          QOpenGLFramebufferObject::CombinedDepthStencil);
+    m_ref3dResolveFbo = new QOpenGLFramebufferObject(size, resolveFormat);
+  }
+
+  // the viewer may be drawing into the LUT calibration fbo: restore
+  // whatever was bound, not the default framebuffer
+  GLint prevFbo = 0, prevViewport[4];
+  glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevFbo);
+  glGetIntegerv(GL_VIEWPORT, prevViewport);
+
+  QOpenGLFramebufferObject *target =
+      m_ref3dFbo ? m_ref3dFbo : m_ref3dResolveFbo;
+  target->bind();
+  glViewport(0, 0, size.width(), size.height());
+  ref->draw(ref->currentCamera(app->getCurrentFrame()->getFrame()),
+            camSize.lx / camSize.ly, true);
+  if (m_ref3dFbo)
+    QOpenGLFramebufferObject::blitFramebuffer(m_ref3dResolveFbo, m_ref3dFbo);
+  glBindFramebuffer(GL_FRAMEBUFFER, prevFbo);
+  glViewport(prevViewport[0], prevViewport[1], prevViewport[2],
+             prevViewport[3]);
+
+  // the offscreen image is premultiplied (cleared to transparent black)
+  glPushAttrib(GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_TEXTURE_BIT |
+               GL_CURRENT_BIT);
+  glPushMatrix();
+  tglMultMatrix(m_drawCameraAff);
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, m_ref3dResolveFbo->texture());
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+  float a = ref->opacity() / 100.0f;
+  glColor4f(a, a, a, a);
+  glBegin(GL_QUADS);
+  glTexCoord2d(0, 0);
+  glVertex2d(frameRect.x0, frameRect.y0);
+  glTexCoord2d(1, 0);
+  glVertex2d(frameRect.x1, frameRect.y0);
+  glTexCoord2d(1, 1);
+  glVertex2d(frameRect.x1, frameRect.y1);
+  glTexCoord2d(0, 1);
+  glVertex2d(frameRect.x0, frameRect.y1);
+  glEnd();
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glPopMatrix();
+  glPopAttrib();
 }
 
 //-----------------------------------------------------------------------------

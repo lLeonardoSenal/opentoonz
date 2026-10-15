@@ -2813,6 +2813,8 @@ void MainWindow::defineActions() {
                           "comboviewer");
   createMenuWindowsAction(MI_OpenHistoryPanel, QT_TR_NOOP("&History"), "Ctrl+H",
                           "history");
+  createMenuWindowsAction(MI_OpenRef3DPanel, QT_TR_NOOP("&3D Reference"), "",
+                          "");
 
   // Shortcut keys will be assigned once the feature is complete.
   QAction *brushPresetAct = createMenuWindowsAction(

@@ -566,6 +566,7 @@ QMenuBar *StackedMenuBar::createCleanupMenuBar() {
     addMenuItem(otherWindowsMenu, MI_OpenToolbar);
     addMenuItem(otherWindowsMenu, MI_OpenToolOptionBar);
     addMenuItem(otherWindowsMenu, MI_OpenHistoryPanel);
+    addMenuItem(otherWindowsMenu, MI_OpenRef3DPanel);
     addMenuItem(otherWindowsMenu, MI_OpenBrushPresetPanel);
     addMenuItem(otherWindowsMenu, MI_OpenToolPropertiesPanel);
     addMenuItem(otherWindowsMenu, MI_OpenTMessage);
@@ -738,6 +739,7 @@ QMenuBar *StackedMenuBar::createPltEditMenuBar() {
     addMenuItem(otherWindowsMenu, MI_OpenToolbar);
     addMenuItem(otherWindowsMenu, MI_OpenToolOptionBar);
     addMenuItem(otherWindowsMenu, MI_OpenHistoryPanel);
+    addMenuItem(otherWindowsMenu, MI_OpenRef3DPanel);
     addMenuItem(otherWindowsMenu, MI_OpenBrushPresetPanel);
     addMenuItem(otherWindowsMenu, MI_OpenToolPropertiesPanel);
     addMenuItem(otherWindowsMenu, MI_OpenTMessage);
@@ -920,6 +922,7 @@ QMenuBar *StackedMenuBar::createInknPaintMenuBar() {
     addMenuItem(otherWindowsMenu, MI_OpenSchematic);
     addMenuItem(otherWindowsMenu, MI_OpenTasks);
     addMenuItem(otherWindowsMenu, MI_OpenHistoryPanel);
+    addMenuItem(otherWindowsMenu, MI_OpenRef3DPanel);
     addMenuItem(otherWindowsMenu, MI_OpenBrushPresetPanel);
     addMenuItem(otherWindowsMenu, MI_OpenToolPropertiesPanel);
     addMenuItem(otherWindowsMenu, MI_OpenTMessage);
@@ -1107,6 +1110,7 @@ QMenuBar *StackedMenuBar::createXsheetMenuBar() {
     addMenuItem(otherWindowsMenu, MI_OpenToolbar);
     addMenuItem(otherWindowsMenu, MI_OpenToolOptionBar);
     addMenuItem(otherWindowsMenu, MI_OpenHistoryPanel);
+    addMenuItem(otherWindowsMenu, MI_OpenRef3DPanel);
     addMenuItem(otherWindowsMenu, MI_OpenBrushPresetPanel);
     addMenuItem(otherWindowsMenu, MI_OpenToolPropertiesPanel);
     addMenuItem(otherWindowsMenu, MI_OpenTMessage);
@@ -1577,6 +1581,7 @@ QMenuBar *StackedMenuBar::createFullMenuBar() {
   addMenuItem(windowsMenu, MI_FxParamEditor);
   addMenuItem(windowsMenu, MI_OpenFilmStrip);
   addMenuItem(windowsMenu, MI_OpenLocator);
+  addMenuItem(windowsMenu, MI_OpenRef3DPanel);
   windowsMenu->addSeparator();
   addMenuItem(windowsMenu, MI_OpenFileBrowser);
   addMenuItem(windowsMenu, MI_OpenPreproductionBoard);

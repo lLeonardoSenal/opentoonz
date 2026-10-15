@@ -330,6 +330,7 @@
         <command>MI_OpenBatchServers</command>
         <command>MI_OpenTMessage</command>
         <command>MI_OpenHistoryPanel</command>
+        <command>MI_OpenRef3DPanel</command>
         <command>MI_AudioRecording</command>
         <command>MI_OpenStopMotionPanel</command>
         <command>MI_StartupPopup</command>
