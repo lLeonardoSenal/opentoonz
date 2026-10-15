@@ -396,8 +396,9 @@ void Preferences::definePreferenceItems() {
   define(lazyLoadRooms, "lazyLoadRooms", QMetaType::Bool, true);
 
   // Interface
+  // this fork defaults to its Clip Studio Paint-like theme and room set
   define(CurrentStyleSheetName, "CurrentStyleSheetName", QMetaType::QString,
-         "Default");
+         "Harmony");
 
   // Qt has a bug in recent versions that Menu item does not show correctly
   // (QTBUG-90242). The current OT handles this issue by applying an extra
@@ -413,7 +414,7 @@ void Preferences::definePreferenceItems() {
   define(oldCameraUnits, "oldCameraUnits", QMetaType::QString, "inch");
   define(linearUnits, "linearUnits", QMetaType::QString, "mm");
   define(cameraUnits, "cameraUnits", QMetaType::QString, "inch");
-  define(CurrentRoomChoice, "CurrentRoomChoice", QMetaType::QString, "Default");
+  define(CurrentRoomChoice, "CurrentRoomChoice", QMetaType::QString, "Harmony");
   define(functionEditorToggle, "functionEditorToggle", QMetaType::Int,
          static_cast<int>(ShowGraphEditorInPopup));
   define(moveCurrentFrameByClickCellArea, "moveCurrentFrameByClickCellArea",

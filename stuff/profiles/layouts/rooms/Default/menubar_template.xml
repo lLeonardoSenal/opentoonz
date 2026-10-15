@@ -343,6 +343,8 @@
         <command>MI_SeeThroughWindow</command>
     </menu>
     <menu title="Help">
+        <command>MI_SearchCommands</command>
+        <separator/>
         <command>MI_OpenOnlineManual</command>
         <command>MI_OpenWhatsNew</command>
         <command>MI_Quicklink</command>

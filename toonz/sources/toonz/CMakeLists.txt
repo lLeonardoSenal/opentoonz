@@ -52,6 +52,7 @@ set(MOC_HEADERS
     historypane.h
     ref3dpanel.h
     ref3dscene.h
+    commandsearchpopup.h
     imageviewer.h
     layerfooterpanel.h
     layerheaderpanel.h
@@ -385,6 +386,7 @@ set(SOURCES
     historypane.cpp
     ref3dpanel.cpp
     ref3dscene.cpp
+    commandsearchpopup.cpp
     cleanupsettingspane.cpp
     audiorecordingpopup.cpp
     locatorpopup.cpp

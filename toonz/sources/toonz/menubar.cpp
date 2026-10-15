@@ -1609,6 +1609,8 @@ QMenuBar *StackedMenuBar::createFullMenuBar() {
 
   // Menu' HELP
   QMenu *helpMenu = addMenu(tr("Help"), fullMenuBar);
+  addMenuItem(helpMenu, MI_SearchCommands);
+  helpMenu->addSeparator();
   addMenuItem(helpMenu, MI_OpenOnlineManual);
   addMenuItem(helpMenu, MI_OpenWhatsNew);
   addMenuItem(helpMenu, MI_Quicklink);
